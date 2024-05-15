@@ -21,7 +21,13 @@ class JobController extends Controller
             'category'
         );
 
-        return view('job.index', ['jobs' => Job::filter($filters)->get()]);
+        return view(
+            'job.index',
+            [
+                'jobs' => Job::with('employer')
+                    ->filter($filters)->get()
+            ]
+        );
     }
 
     // public function index()
@@ -72,7 +78,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('job.show', compact('job'));
+        return view('job.show', ['job' => $job->load(('employer.jobs'))]); // employer.jobs => get the employer with all its jobs in same query!
     }
 
     /**
